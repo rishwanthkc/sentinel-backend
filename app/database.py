@@ -3,11 +3,11 @@ from sqlalchemy.orm import sessionmaker, declarative_base
 
 from dotenv import load_dotenv
 import os
-
 import mysql.connector
 
 load_dotenv()
 
+# Environment Variables
 DB_HOST = os.getenv("DB_HOST")
 DB_PORT = os.getenv("DB_PORT")
 DB_USER = os.getenv("DB_USER")
@@ -19,7 +19,10 @@ DATABASE_URL = (
     f"{DB_HOST}:{DB_PORT}/{DB_NAME}"
 )
 
-engine = create_engine(DATABASE_URL)
+engine = create_engine(
+    DATABASE_URL,
+    pool_pre_ping=True
+)
 
 SessionLocal = sessionmaker(
     autocommit=False,
@@ -31,21 +34,17 @@ Base = declarative_base()
 
 
 def get_db():
-
     db = SessionLocal()
-
     try:
         yield db
-
     finally:
         db.close()
 
 
 def get_connection():
-
     return mysql.connector.connect(
         host=DB_HOST,
-        port=DB_PORT,
+        port=int(DB_PORT),
         user=DB_USER,
         password=DB_PASSWORD,
         database=DB_NAME
