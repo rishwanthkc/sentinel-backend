@@ -1,5 +1,6 @@
 import os
 import tempfile
+from urllib.parse import quote_plus
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
@@ -29,7 +30,7 @@ if DB_CA_CERT:
         _f.write(DB_CA_CERT.replace("\\n", "\n"))
 
 DATABASE_URL = (
-    f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@"
+    f"mysql+pymysql://{quote_plus(DB_USER or '')}:{quote_plus(DB_PASSWORD or '')}@"
     f"{DB_HOST}:{DB_PORT}/{DB_NAME}"
 )
 
