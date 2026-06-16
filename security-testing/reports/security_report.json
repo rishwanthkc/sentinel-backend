@@ -1,0 +1,67 @@
+[
+  {
+    "endpoint": "/auth/register",
+    "method": "POST",
+    "role": "Public",
+    "status": "N/A",
+    "expected_status": "401/403",
+    "finding": true,
+    "severity": "High",
+    "response_time_ms": 0,
+    "test_category": "Authentication Bypass",
+    "note": "Route is public with no authentication enforcement in source code.",
+    "timestamp": "2026-06-16T05:28:49.275901Z"
+  },
+  {
+    "endpoint": "/auth/login",
+    "method": "POST",
+    "role": "Public",
+    "status": "N/A",
+    "expected_status": "401/403",
+    "finding": true,
+    "severity": "High",
+    "response_time_ms": 0,
+    "test_category": "Authentication Bypass",
+    "note": "Login route lacks token-based protection and requires no auth in source.",
+    "timestamp": "2026-06-16T05:28:49.276014Z"
+  },
+  {
+    "endpoint": "ALL DISCOVERED ENDPOINTS",
+    "method": "N/A",
+    "role": "Public",
+    "status": "N/A",
+    "expected_status": "401/403 for protected routes",
+    "finding": true,
+    "severity": "High",
+    "response_time_ms": 0,
+    "test_category": "Authorization Bypass",
+    "note": "No role-based access controls or authorization checks observed in route handlers.",
+    "timestamp": "2026-06-16T05:28:49.276057Z"
+  },
+  {
+    "endpoint": "app/database.py",
+    "method": "N/A",
+    "role": "N/A",
+    "status": "N/A",
+    "expected_status": "N/A",
+    "finding": true,
+    "severity": "High",
+    "response_time_ms": 0,
+    "test_category": "Hardcoded Secrets",
+    "note": "Environment variable use is correct, but `.env` contains a plaintext DB_PASSWORD value.",
+    "timestamp": "2026-06-16T05:28:49.276091Z"
+  },
+  {
+    "endpoint": ".env",
+    "method": "N/A",
+    "role": "N/A",
+    "status": "N/A",
+    "expected_status": "N/A",
+    "finding": true,
+    "severity": "High",
+    "response_time_ms": 0,
+    "test_category": "Hardcoded Secrets",
+    "note": "Local environment file contains DB_PASSWORD=********.",
+    "timestamp": "2026-06-16T05:28:49.276125Z"
+  }
+]

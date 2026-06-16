@@ -1,0 +1,35 @@
+# Sentinel Backend Security Testing Specification
+
+Scope:
+- Only test `baseUrl` from input.json.
+- Do not target any external domain.
+
+Testing methodology:
+- Discover endpoints via source code and known API routes.
+- Model expected access for each endpoint.
+- Execute detection-only assessments using safe HTTP methods when possible.
+- Generate structured findings, Excel and PDF reports, and a final summary.
+
+Authentication requirements:
+- Validate missing JWT, empty JWT, malformed JWT, expired JWT, invalid signature if JWT auth exists.
+- If no JWT auth exists, report unauthorized access controls.
+
+Endpoint discovery logic:
+- Inspect code for route definitions, router inclusion, path parameters, and OpenAPI definitions.
+- Check `/v3/api-docs`, `/swagger.json`, `/openapi.json`, `/swagger-ui` if available.
+- Exclude health, actuator, metrics endpoints from inventory.
+
+Reporting requirements:
+- Generate `endpoint_inventory.md` and `DISCOVERED_ENDPOINTS.md`.
+- Generate `access_matrix.xlsx`, `rbac_matrix.xlsx`, `security_report.json`, `Backend_Security_Assessment.xlsx`, `Backend_Security_Assessment.pdf`, `FINAL_SECURITY_SUMMARY.md`.
+
+Role-based access requirements:
+- Determine if each endpoint is Public, Authenticated, Admin Only, Manager Only, User Only, or Role Restricted.
+- Record expected role enforcement in reports.
+
+Rules:
+- Only create and store files under `sentinel-backend/security-testing/`.
+- Do not modify Android or Web folders.
+- Do not execute destructive operations.
+- Only permitted safe methods: GET, HEAD, safe POST.
+- Detection only unless explicit authorization exists.

@@ -1,0 +1,1 @@
+Discovery complete. Confirm to proceed with DAST execution and report generation.
