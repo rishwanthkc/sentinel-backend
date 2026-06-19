@@ -1,21 +1,11 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
-from app.database import SessionLocal
+from app.database import get_db
 from app.models.emergency_contact import EmergencyContact
 from app.schemas.emergency_contact_schema import EmergencyContactCreate
 
 router = APIRouter()
-
-def get_db():
-
-    db = SessionLocal()
-
-    try:
-        yield db
-
-    finally:
-        db.close()
 
 
 @router.post("/add")

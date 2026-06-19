@@ -1,6 +1,7 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.orm import Session
 from pydantic import BaseModel
-from app.database import SessionLocal
+from app.database import get_db
 from app.models.user import User
 
 router = APIRouter()
@@ -11,9 +12,7 @@ class LoginRequest(BaseModel):
 
 
 @router.post("/login")
-def login_user(data: LoginRequest):
-
-    db = SessionLocal()
+def login_user(data: LoginRequest, db: Session = Depends(get_db)):
 
     user = (
         db.query(User)
@@ -28,9 +27,9 @@ def login_user(data: LoginRequest):
         )
 
     return {
-    "message": "Login successful",
-    "user_id": user.user_id,
-    "display_name": user.display_name,
-    "email": user.email,
-    "role": user.role
-}
+        "message": "Login successful",
+        "user_id": user.user_id,
+        "display_name": user.display_name,
+        "email": user.email,
+        "role": user.role
+    }

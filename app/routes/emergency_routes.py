@@ -12,40 +12,35 @@ from app.models.emergency_model import EmergencyRequest
 router = APIRouter()
 
 @router.post("/trigger")
-
 def trigger_emergency(
     request: EmergencyRequest
 ):
-
     connection = get_connection()
-
-    cursor = connection.cursor()
-
-    query = """
-    INSERT INTO emergencies
-    (
-        user_email,
-        latitude,
-        longitude,
-        status
-    )
-    VALUES (%s,%s,%s,%s)
-    """
-
-    values = (
-        request.user_email,
-        request.latitude,
-        request.longitude,
-        "ACTIVE"
-    )
-
-    cursor.execute(query, values)
-
-    connection.commit()
-
-    cursor.close()
-
-    connection.close()
+    try:
+        cursor = connection.cursor()
+        try:
+            query = """
+            INSERT INTO emergencies
+            (
+                user_email,
+                latitude,
+                longitude,
+                status
+            )
+            VALUES (%s,%s,%s,%s)
+            """
+            values = (
+                request.user_email,
+                request.latitude,
+                request.longitude,
+                "ACTIVE"
+            )
+            cursor.execute(query, values)
+            connection.commit()
+        finally:
+            cursor.close()
+    finally:
+        connection.close()
 
     return {
         "message":
@@ -88,24 +83,23 @@ def get_history(
 def resolve_emergency(
     emergency_id: int
 ):
-
     connection = get_connection()
-
-    cursor = connection.cursor()
-
-    cursor.execute(
-        """
-        UPDATE emergencies
-        SET status='RESOLVED'
-        WHERE id=%s
-        """,
-        (emergency_id,)
-    )
-
-    connection.commit()
-
-    cursor.close()
-    connection.close()
+    try:
+        cursor = connection.cursor()
+        try:
+            cursor.execute(
+                """
+                UPDATE emergencies
+                SET status='RESOLVED'
+                WHERE id=%s
+                """,
+                (emergency_id,)
+            )
+            connection.commit()
+        finally:
+            cursor.close()
+    finally:
+        connection.close()
 
     return {
         "message": "Emergency Resolved"
