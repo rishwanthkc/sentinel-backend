@@ -41,6 +41,21 @@ def _seed():
         added = seed_crime_data(db)
         if added:
             print(f"[seed] inserted {added} sample crime points")
+        
+        # Seed Alice as ADMIN
+        alice = db.query(User).filter(User.email == "cipher@new.com").first()
+        if not alice:
+            new_admin = User(
+                email="cipher@new.com",
+                display_name="Alice",
+                firebase_uid="cipher-admin-uid-12345",
+                role="ADMIN",
+                email_verified=True,
+                phone_verified=True
+            )
+            db.add(new_admin)
+            db.commit()
+            print("[seed] inserted Alice as ADMIN")
     except Exception as exc:
         print(f"[seed] skipped: {exc}")
     finally:
